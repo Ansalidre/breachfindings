@@ -52,20 +52,31 @@ export default function HomePage() {
       <section className="hero">
         <div className="hero-copy">
           <p className="eyebrow">Exposure snapshot for companies</p>
-          <h1>Find out whether your business email and company domain appear in known breaches</h1>
-          <p className="hero-text">
-            Enter your business email and your company domain. BreachFindings shows a fast
-            risk snapshot designed as a lead magnet for report requests and sales conversations.
-          </p>
+          <h1>Find out whether your business email or company domain appear in known breaches</h1>
+<p className="hero-text">
+  Enter your business email or your company domain to start a free exposure check.
+  Before the result is shown, we collect your contact details for the report funnel.
+</p>
         </div>
 
         <div className="hero-card">
-          <div className="form-grid">
-            <div className="field">
-              <label htmlFor="businessEmail">Business email</label>
-              <input id="businessEmail" type="email" placeholder="name@company.com" />
-            </div>
-            <div className="field">
+          <div className="form-grid single-column-form">
+  <div className="field">
+    <label htmlFor="businessEmail">Business email</label>
+    <input id="businessEmail" type="email" placeholder="name@company.com" />
+  </div>
+
+  <div className="or-divider">OR</div>
+
+  <div className="field">
+    <label htmlFor="companyDomain">Company domain</label>
+    <input id="companyDomain" type="text" placeholder="company.com" />
+  </div>
+
+  <div className="field field-wide">
+    <button type="button">Run free exposure check</button>
+  </div>
+</div>
               <label htmlFor="companyDomain">Company domain</label>
               <input id="companyDomain" type="text" placeholder="company.com" />
             </div>
