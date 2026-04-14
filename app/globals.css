@@ -7,7 +7,7 @@
   --text: #ecf4ff;
   --muted: #9cb2ce;
   --accent: #1ea7ff;
-  --accent-strong: #65c7ff;
+  --accent-strong: #d;
   --success: #13314f;
 }
 
@@ -52,16 +52,17 @@ input {
   padding: 8px 0 32px;
 }
 
-.brand-wrap {
-  display: flex;
-  align-items: center;
-  gap: 14px;
+.brand-wrap .logo-image {
+  width: 20px !important;
+  height: 20px !important;
+  object-fit: contain;
+  display: block;
 }
 .logo-image {
-  width: 12px;
-  height: 12px;
+  width: 32px;
+  height: 32px;
   object-fit: contain;
-  border-radius: 2px;
+  border-radius: 12px;
 }
 
 .brand-badge {
