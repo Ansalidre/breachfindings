@@ -8,26 +8,12 @@
   --muted: #9cb2ce;
   --accent: #1ea7ff;
   --accent-strong: #65c7ff;
-  --success: #13314f;
-}
-.or-divider {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  color: var(--accent-strong);
-  font-weight: 700;
-  letter-spacing: 0.12em;
 }
 
 * {
   box-sizing: border-box;
 }
-.logo-image {
-  width: 52px;
-  height: 52px;
-  object-fit: contain;
-  border-radius: 12px;
-}
+
 html {
   scroll-behavior: smooth;
 }
@@ -71,15 +57,11 @@ input {
   gap: 14px;
 }
 
-.brand-badge {
-  width: 48px;
-  height: 48px;
-  display: grid;
-  place-items: center;
-  border-radius: 14px;
-  background: linear-gradient(135deg, var(--accent), #0d5ea5);
-  font-weight: 700;
-  letter-spacing: 0.06em;
+.logo-image {
+  width: 52px;
+  height: 52px;
+  object-fit: contain;
+  border-radius: 12px;
 }
 
 .brand-title {
@@ -159,8 +141,11 @@ input {
 
 .form-grid {
   display: grid;
-  grid-template-columns: 1fr 1fr;
   gap: 16px;
+}
+
+.single-column-form {
+  grid-template-columns: 1fr;
 }
 
 .field {
@@ -204,6 +189,16 @@ input {
   cursor: pointer;
 }
 
+.or-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-strong);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
 .snapshot-card {
   padding: 28px;
   margin-top: 12px;
@@ -223,7 +218,6 @@ input {
   background: rgba(255, 89, 89, 0.1);
   color: #ffc5c5;
   font-weight: 700;
-  white-space: nowrap;
 }
 
 .metric-grid,
@@ -272,7 +266,6 @@ input {
 .primary-link {
   color: var(--accent-strong);
   font-weight: 700;
-  white-space: nowrap;
 }
 
 .trust-grid {
@@ -315,27 +308,5 @@ input {
   .topbar {
     flex-direction: column;
     align-items: flex-start;
-  }
-}
-
-@media (max-width: 640px) {
-  .page-shell {
-    width: min(100% - 20px, 1180px);
-    padding-top: 18px;
-  }
-
-  .hero-card,
-  .snapshot-card,
-  .trust-card,
-  .report-card {
-    border-radius: 20px;
-  }
-
-  .form-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .hero h1 {
-    font-size: 2.2rem;
   }
 }
