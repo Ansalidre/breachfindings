@@ -1,5 +1,3 @@
-<img src="/logo.jpg" alt="Apasec Logo" className="logo-image" />
-
 const metrics = [
   {
     label: "Business email breaches",
@@ -40,7 +38,7 @@ export default function HomePage() {
     <main className="page-shell">
       <header className="topbar">
         <div className="brand-wrap">
-          <div className="brand-badge">BF</div>
+          <img src="/logo.jpg" alt="Apasec Logo" className="logo-image" />
           <div>
             <div className="brand-title">breachfindings</div>
             <div className="brand-subtitle">by apasec</div>
