@@ -62,13 +62,16 @@ export default function HomePage() {
         <div className="hero-card">
           <div className="form-grid">
             <div className="field">
-              <label htmlFor="businessEmail">Business email</label>
-              <input id="businessEmail" type="email" placeholder="name@company.com" />
-            </div>
-            <div className="field">
-              <label htmlFor="companyDomain">Company domain</label>
-              <input id="companyDomain" type="text" placeholder="company.com" />
-            </div>
+  <label htmlFor="businessEmail">Business email</label>
+  <input id="businessEmail" type="email" placeholder="name@company.com" />
+</div>
+
+<div className="or-divider">OR</div>
+
+<div className="field">
+  <label htmlFor="companyDomain">Company domain</label>
+  <input id="companyDomain" type="text" placeholder="company.com" />
+</div>
             <div className="field field-wide">
               <button type="button">Run free exposure check</button>
             </div>
