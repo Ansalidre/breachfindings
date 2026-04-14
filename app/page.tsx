@@ -38,7 +38,12 @@ export default function HomePage() {
     <main className="page-shell">
       <header className="topbar">
         <div className="brand-wrap">
-         <img src="/logo.jpg" alt="Apasec Logo" className="logo-image" />
+         <img
+  src="/logo.jpg"
+  alt="Apasec Logo"
+  className="logo-image"
+  style={{ width: "24px", height: "24px", objectFit: "contain", display: "block" }}
+/>
           <div>
             <div className="brand-title">breachfindings</div>
             <div className="brand-subtitle">by apasec</div>
