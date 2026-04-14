@@ -38,7 +38,7 @@ export default function HomePage() {
     <main className="page-shell">
       <header className="topbar">
         <div className="brand-wrap">
-          <div className="brand-badge">BF</div>
+          <img src="/logo.png" alt="Apasec Logo" className="logo-image" />
           <div>
             <div className="brand-title">breachfindings</div>
             <div className="brand-subtitle">by apasec</div>
@@ -74,7 +74,7 @@ export default function HomePage() {
             </div>
           </div>
           <p className="form-note">
-            Later, this form will connect to Darkscope via your own backend and store leads in
+            Later, this form will connect to Apascope via your own backend and store leads in
             Supabase.
           </p>
         </div>
@@ -126,9 +126,9 @@ export default function HomePage() {
           </p>
         </article>
         <article className="trust-card">
-          <h3>Ready for Darkscope</h3>
+          <h3>Ready for Apascope</h3>
           <p>
-            The structure is designed so your own backend can query Darkscope securely and return a
+            The structure is designed so your own backend can query Apscope securely and return a
             normalized summary.
           </p>
         </article>
