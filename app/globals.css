@@ -65,8 +65,8 @@ input {
 }
 
 .brand-badge {
-  width: 48px;
-  height: 48px;
+  width: 28px;
+  height: 28px;
   display: grid;
   place-items: center;
   border-radius: 14px;
