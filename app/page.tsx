@@ -104,8 +104,7 @@ export default function HomePage() {
 
   return (
     <main className="page-shell">
-      return (
-  <main className="page-shell">
+
     {showLeadModal && (
       <div className="modal-overlay">
         <div className="modal-card">
