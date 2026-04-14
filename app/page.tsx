@@ -59,39 +59,39 @@ export default function HomePage() {
     <h1>Have I Been Breached?</h1>
   </div>
 
-  <div className="hero-card centered-card">
-    <div className="form-grid single-column-form">
-      <div className="field">
-        <label htmlFor="businessEmail">Business Email</label>
-        <p className="field-hint">
-          No free mail providers allowed (e.g. web.de, gmx.de, gmail.com)
-        </p>
-        <input
-          id="businessEmail"
-          type="email"
-          placeholder="name@company.com"
-        />
-      </div>
+  <div className="hero-card wide-card">
+  <div className="dual-form-layout">
+    <div className="field-block">
+      <label htmlFor="businessEmail">Business Email</label>
+      <p className="field-hint">
+        No free mail providers allowed (e.g. web.de, gmx.de, gmail.com)
+      </p>
+      <input
+        id="businessEmail"
+        type="email"
+        placeholder="name@company.com"
+      />
+    </div>
 
-      <div className="or-divider">OR</div>
+    <div className="or-divider centered-or">OR</div>
 
-      <div className="field">
-        <label htmlFor="companyDomain">Business Domain</label>
-        <p className="field-hint">
-          Please enter the domain without www.
-        </p>
-        <input
-          id="companyDomain"
-          type="text"
-          placeholder="company.com"
-        />
-      </div>
-
-      <div className="field field-wide">
-        <button type="button">Run free exposure check</button>
-      </div>
+    <div className="field-block">
+      <label htmlFor="companyDomain">Business Domain</label>
+      <p className="field-hint">
+        Please enter the domain without www.
+      </p>
+      <input
+        id="companyDomain"
+        type="text"
+        placeholder="company.com"
+      />
     </div>
   </div>
+
+  <div className="hero-button-row">
+    <button type="button">Run free exposure check</button>
+  </div>
+</div>
 </section>
 
       <section className="snapshot-card">
