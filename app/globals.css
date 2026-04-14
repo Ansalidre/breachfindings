@@ -58,10 +58,10 @@ input {
   gap: 14px;
 }
 .logo-image {
-  width: 32px;
-  height: 32px;
+  width: 12px;
+  height: 12px;
   object-fit: contain;
-  border-radius: 12px;
+  border-radius: 2px;
 }
 
 .brand-badge {
