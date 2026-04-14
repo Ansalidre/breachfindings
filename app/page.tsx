@@ -181,7 +181,7 @@ export default function HomePage() {
 
       <header className="topbar">
         <div className="brand-wrap">
-          <img src="/logo.jpg" alt="Apasec Logo" className="logo-image" />
+          <img src="/logo.png" alt="Apasec Logo" className="logo-image" />
           <div>
             <div className="brand-title">breachfindings</div>
             <div className="brand-subtitle">by apasec</div>
