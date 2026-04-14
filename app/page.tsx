@@ -49,6 +49,7 @@ export default function HomePage() {
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [leadEmail, setLeadEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [formError, setFormError] = useState("");
 
   const expectedDomain = useMemo(() => {
@@ -75,7 +76,7 @@ export default function HomePage() {
     e.preventDefault();
     setFormError("");
 
-    if (!firstName.trim() || !lastName.trim() || !leadEmail.trim()) {
+    if (!firstName.trim() || !lastName.trim() || !leadEmail.trim() || !phone.trim()) {
       setFormError("Please complete all fields.");
       return;
     }
@@ -142,7 +143,16 @@ export default function HomePage() {
                   onChange={(e) => setLastName(e.target.value)}
                 />
               </div>
-
+              <div className="field">
+            <label htmlFor="phone">Phone number</label>
+            <input
+            id="phone"
+            type="tel"
+            placeholder="+49 123 456789"
+            value={phone}
+            onChange={(e) => setPhone(e.target.value)}
+            />
+            </div>
               <div className="field">
                 <label htmlFor="leadEmail">Email</label>
                 <input
