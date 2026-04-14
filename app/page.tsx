@@ -77,7 +77,12 @@ export default function HomePage() {
   <input id="companyDomain" type="text" placeholder="company.com" />
 </div>
             <div className="field field-wide">
-              <button type="button">Run free exposure check</button>
+              <button type="button" onClick={() => setShowResults(true)}>
+                {showResults && (
+   ... snapshot section ...
+)}
+  Run free exposure check
+</button>
             </div>
           </div>
           <p className="form-note">
