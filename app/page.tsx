@@ -1,3 +1,5 @@
+<img src="/logo.jpg" alt="Apasec Logo" className="logo-image" />
+
 const metrics = [
   {
     label: "Business email breaches",
