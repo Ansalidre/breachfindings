@@ -10,6 +10,14 @@
   --accent-strong: #65c7ff;
   --success: #13314f;
 }
+.or-divider {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--accent-strong);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+}
 
 * {
   box-sizing: border-box;
