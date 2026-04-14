@@ -208,12 +208,12 @@ input {
 }
 
 .centered-or {
-  align-self: center;
+  align-self: end;
   justify-self: center;
   font-size: 1.05rem;
   font-weight: 800;
   color: var(--accent-strong);
-  padding-bottom: 14px;
+  margin-bottom: 16px;
 }
 
 .hero-button-row {
