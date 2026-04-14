@@ -42,7 +42,7 @@ export default function HomePage() {
   src="/logo.jpg"
   alt="Apasec Logo"
   className="logo-image"
-  style={{ width: "24px", height: "24px", objectFit: "contain", display: "block" }}
+  style={{ width: "14px", height: "14px", objectFit: "contain", display: "block" }}
 />
           <div>
             <div className="brand-title">breachfindings</div>
