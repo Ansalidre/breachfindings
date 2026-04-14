@@ -104,9 +104,88 @@ export default function HomePage() {
 
   return (
     <main className="page-shell">
+      return (
+  <main className="page-shell">
+    {showLeadModal && (
+      <div className="modal-overlay">
+        <div className="modal-card">
+          <div className="modal-header">
+            <h2>Complete your free check</h2>
+            <button
+              type="button"
+              className="modal-close"
+              onClick={() => {
+                setShowLeadModal(false);
+                setFormError("");
+              }}
+            >
+              ×
+            </button>
+          </div>
+
+          <form className="modal-form" onSubmit={handleLeadSubmit}>
+            <div className="field">
+              <label htmlFor="firstName">First name</label>
+              <input
+                id="firstName"
+                type="text"
+                placeholder="First name"
+                value={firstName}
+                onChange={(e) => setFirstName(e.target.value)}
+              />
+            </div>
+
+            <div className="field">
+              <label htmlFor="lastName">Last name</label>
+              <input
+                id="lastName"
+                type="text"
+                placeholder="Last name"
+                value={lastName}
+                onChange={(e) => setLastName(e.target.value)}
+              />
+            </div>
+
+            <div className="field">
+              <label htmlFor="leadEmail">Email</label>
+              <input
+                id="leadEmail"
+                type="email"
+                placeholder="name@company.com"
+                value={leadEmail}
+                onChange={(e) => setLeadEmail(e.target.value)}
+              />
+            </div>
+
+            <p className="match-info">
+              Your email must match this domain:
+              <strong> {expectedDomain || "—"}</strong>
+            </p>
+
+            {formError && <p className="form-error">{formError}</p>}
+
+            <div className="modal-actions">
+              <button
+                type="button"
+                className="secondary-button"
+                onClick={() => {
+                  setShowLeadModal(false);
+                  setFormError("");
+                }}
+              >
+                Cancel
+              </button>
+              <button type="submit">Continue</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    )}
+
+    <header className="topbar">
       <header className="topbar">
         <div className="brand-wrap">
-          <img src="/logo.jpg" alt="Apasec Logo" className="logo-image" />
+          <img src="/logo.png" alt="Apasec Logo" className="logo-image" />
           <div>
             <div className="brand-title">breachfindings</div>
             <div className="brand-subtitle">by apasec</div>
