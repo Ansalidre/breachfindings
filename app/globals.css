@@ -58,8 +58,8 @@ input {
   gap: 14px;
 }
 .logo-image {
-  width: 52px;
-  height: 52px;
+  width: 32px;
+  height: 32px;
   object-fit: contain;
   border-radius: 12px;
 }
