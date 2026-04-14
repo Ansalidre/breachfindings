@@ -39,10 +39,10 @@ export default function HomePage() {
       <header className="topbar">
         <div className="brand-wrap">
          <img
-  src="/logo.jpg"
+  src="/logo.png"
   alt="Apasec Logo"
   className="logo-image"
-  style={{ width: "14px", height: "14px", objectFit: "contain", display: "block" }}
+  style={{ width: "24px", height: "28px", objectFit: "contain", display: "block" }}
 />
           <div>
             <div className="brand-title">breachfindings</div>
