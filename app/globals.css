@@ -52,12 +52,7 @@ input {
   padding: 8px 0 32px;
 }
 
-.brand-wrap .logo-image {
-  width: 20px !important;
-  height: 20px !important;
-  object-fit: contain;
-  display: block;
-}
+
 .logo-image {
   width: 32px;
   height: 32px;
