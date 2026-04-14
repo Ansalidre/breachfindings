@@ -1,3 +1,7 @@
+"use client";
+
+import { useMemo, useState } from "react";
+
 const metrics = [
   {
     label: "Business email breaches",
@@ -34,6 +38,60 @@ const reportOptions = [
 ];
 
 export default function HomePage() {
+    const [businessEmail, setBusinessEmail] = useState("");
+  const [companyDomain, setCompanyDomain] = useState("");
+  const [showLeadModal, setShowLeadModal] = useState(false);
+  const [showResults, setShowResults] = useState(false);
+
+  const [firstName, setFirstName] = useState("");
+  const [lastName, setLastName] = useState("");
+  const [leadEmail, setLeadEmail] = useState("");
+  const [formError, setFormError] = useState("");
+
+  const expectedDomain = useMemo(() => {
+    if (businessEmail.includes("@")) {
+      return businessEmail.split("@")[1].trim().toLowerCase();
+    }
+    return companyDomain.trim().toLowerCase().replace(/^www\./, "");
+  }, [businessEmail, companyDomain]);
+
+  function openLeadModal() {
+    setFormError("");
+
+    if (!businessEmail.trim() && !companyDomain.trim()) {
+      setFormError("Please enter either a business email or a business domain first.");
+      return;
+    }
+
+    setShowLeadModal(true);
+  }
+
+  function handleLeadSubmit(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    setFormError("");
+
+    if (!firstName.trim() || !lastName.trim() || !leadEmail.trim()) {
+      setFormError("Please complete all fields.");
+      return;
+    }
+
+    if (!leadEmail.includes("@")) {
+      setFormError("Please enter a valid business email address.");
+      return;
+    }
+
+    const enteredDomain = leadEmail.split("@")[1].trim().toLowerCase();
+
+    if (enteredDomain !== expectedDomain) {
+      setFormError(
+        `The email domain must match ${expectedDomain}.`
+      );
+      return;
+    }
+
+    setShowLeadModal(false);
+    setShowResults(true);
+  }
   return (
     <main className="page-shell">
       <header className="topbar">
@@ -67,10 +125,12 @@ export default function HomePage() {
         No free mail providers allowed (e.g. web.de, gmx.de, gmail.com)
       </p>
       <input
-        id="businessEmail"
-        type="email"
-        placeholder="name@company.com"
-      />
+  id="businessEmail"
+  type="email"
+  placeholder="name@company.com"
+  value={businessEmail}
+  onChange={(e) => setBusinessEmail(e.target.value)}
+/>
     </div>
 
     <div className="or-divider centered-or">OR</div>
@@ -81,19 +141,97 @@ export default function HomePage() {
         Please enter the domain without www.
       </p>
       <input
-        id="companyDomain"
-        type="text"
-        placeholder="company.com"
-      />
-    </div>
-  </div>
+  id="companyDomain"
+  type="text"
+  placeholder="company.com"
+  value={companyDomain}
+  onChange={(e) => setCompanyDomain(e.target.value)}
+/>
 
   <div className="hero-button-row">
-    <button type="button">Run free exposure check</button>
+    <button type="button" onClick={openLeadModal}>
+  Run free exposure check
+</button>
   </div>
 </div>
 </section>
+      {showLeadModal && (
+        <div className="modal-overlay">
+          <div className="modal-card">
+            <div className="modal-header">
+              <h2>Complete your free check</h2>
+              <button
+                type="button"
+                className="modal-close"
+                onClick={() => {
+                  setShowLeadModal(false);
+                  setFormError("");
+                }}
+              >
+                ×
+              </button>
+            </div>
 
+            <form className="modal-form" onSubmit={handleLeadSubmit}>
+              <div className="field">
+                <label htmlFor="firstName">First name</label>
+                <input
+                  id="firstName"
+                  type="text"
+                  placeholder="First name"
+                  value={firstName}
+                  onChange={(e) => setFirstName(e.target.value)}
+                />
+              </div>
+
+              <div className="field">
+                <label htmlFor="lastName">Last name</label>
+                <input
+                  id="lastName"
+                  type="text"
+                  placeholder="Last name"
+                  value={lastName}
+                  onChange={(e) => setLastName(e.target.value)}
+                />
+              </div>
+
+              <div className="field">
+                <label htmlFor="leadEmail">Email</label>
+                <input
+                  id="leadEmail"
+                  type="email"
+                  placeholder="name@company.com"
+                  value={leadEmail}
+                  onChange={(e) => setLeadEmail(e.target.value)}
+                />
+              </div>
+
+              <p className="match-info">
+                Your email must match this domain:
+                <strong> {expectedDomain || "—"}</strong>
+              </p>
+
+              {formError && <p className="form-error">{formError}</p>}
+
+              <div className="modal-actions">
+                <button
+                  type="button"
+                  className="secondary-button"
+                  onClick={() => {
+                    setShowLeadModal(false);
+                    setFormError("");
+                  }}
+                >
+                  Cancel
+                </button>
+                <button type="submit">Continue</button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+          {showResults && (
+        <>
       <section className="snapshot-card">
         <div className="snapshot-header">
           <div>
@@ -123,6 +261,8 @@ export default function HomePage() {
           </a>
         </div>
       </section>
+                  </>
+      )}
 
       <section className="trust-grid">
         <article className="trust-card">
