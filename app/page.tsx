@@ -2,20 +2,17 @@ const metrics = [
   {
     label: "Business email breaches",
     value: "6",
-    description:
-      "How many known breach events included the submitted business email.",
+    description: "How many known breach events included the submitted business email.",
   },
   {
     label: "Domain breaches",
     value: "18",
-    description:
-      "How many known breach datasets included the submitted company domain.",
+    description: "How many known breach datasets included the submitted company domain.",
   },
   {
     label: "Emails discovered",
     value: "137",
-    description:
-      "How many email addresses related to the domain were found in indexed sources.",
+    description: "How many email addresses related to the domain were found in indexed sources.",
   },
 ];
 
@@ -41,13 +38,12 @@ export default function HomePage() {
     <main className="page-shell">
       <header className="topbar">
         <div className="brand-wrap">
-          <img src="/logo.jpg" alt="Apasec Logo" className="logo-image" />
+          <div className="brand-badge">BF</div>
           <div>
             <div className="brand-title">breachfindings</div>
             <div className="brand-subtitle">by apasec</div>
           </div>
         </div>
-
         <a className="topbar-link" href="#reports">
           Request full report
         </a>
@@ -56,47 +52,30 @@ export default function HomePage() {
       <section className="hero">
         <div className="hero-copy">
           <p className="eyebrow">Exposure snapshot for companies</p>
-          <h1>
-            Find out whether your business email or company domain appear in
-            known breaches
-          </h1>
+          <h1>Find out whether your business email and company domain appear in known breaches</h1>
           <p className="hero-text">
-            Enter your business email or your company domain to start a free
-            exposure check. Before the result is shown, we collect your contact
-            details for the report funnel.
+            Enter your business email and your company domain. BreachFindings shows a fast
+            risk snapshot designed as a lead magnet for report requests and sales conversations.
           </p>
         </div>
 
         <div className="hero-card">
-          <div className="form-grid single-column-form">
+          <div className="form-grid">
             <div className="field">
               <label htmlFor="businessEmail">Business email</label>
-              <input
-                id="businessEmail"
-                type="email"
-                placeholder="name@company.com"
-              />
+              <input id="businessEmail" type="email" placeholder="name@company.com" />
             </div>
-
-            <div className="or-divider">OR</div>
-
             <div className="field">
               <label htmlFor="companyDomain">Company domain</label>
-              <input
-                id="companyDomain"
-                type="text"
-                placeholder="company.com"
-              />
+              <input id="companyDomain" type="text" placeholder="company.com" />
             </div>
-
             <div className="field field-wide">
               <button type="button">Run free exposure check</button>
             </div>
           </div>
-
           <p className="form-note">
-            Later, this form will connect to Darkscope via your own backend and
-            store leads in Supabase.
+            Later, this form will connect to Darkscope via your own backend and store leads in
+            Supabase.
           </p>
         </div>
       </section>
@@ -122,9 +101,8 @@ export default function HomePage() {
 
         <div className="snapshot-footer">
           <p>
-            Need the full details behind these findings? Order a complete report
-            with the relevant breach sources, affected identities, and
-            recommended actions.
+            Need the full details behind these findings? Order a complete report with the relevant
+            breach sources, affected identities, and recommended actions.
           </p>
           <a className="primary-link" href="#reports">
             View report options
@@ -136,22 +114,22 @@ export default function HomePage() {
         <article className="trust-card">
           <h3>Lead magnet first</h3>
           <p>
-            The landing page shows only the top-line numbers. Full details stay
-            behind the paid report funnel.
+            The landing page shows only the top-line numbers. Full details stay behind the paid
+            report funnel.
           </p>
         </article>
         <article className="trust-card">
           <h3>Built for business users</h3>
           <p>
-            The form uses business email plus domain to frame the result around
-            the company, not just a single mailbox.
+            The form uses business email plus domain to frame the result around the company, not
+            just a single mailbox.
           </p>
         </article>
         <article className="trust-card">
           <h3>Ready for Darkscope</h3>
           <p>
-            The structure is designed so your own backend can query Darkscope
-            securely and return a normalized summary.
+            The structure is designed so your own backend can query Darkscope securely and return a
+            normalized summary.
           </p>
         </article>
       </section>
@@ -161,8 +139,8 @@ export default function HomePage() {
           <p className="eyebrow">Paid conversion step</p>
           <h2>Request a full report</h2>
           <p>
-            The next screen can route users into Stripe Checkout and trigger
-            report delivery after payment.
+            The next screen can route users into Stripe Checkout and trigger report delivery after
+            payment.
           </p>
         </div>
 
