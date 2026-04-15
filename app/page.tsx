@@ -32,14 +32,14 @@ const metrics = [
 const reportOptions = [
   {
     title: "Company Report",
-    price: "from €99",
+    price: "from €199",
     description:
       "Detailed report for your own organization with exposure summary, risk explanation, and next-step recommendations.",
     cta: "Request company report",
   },
   {
     title: "Company + Suppliers Report",
-    price: "from €299",
+    price: "from €499",
     description:
       "Extended report including your company and relevant supplier exposure intelligence for third-party risk review.",
     cta: "Request supplier report",
