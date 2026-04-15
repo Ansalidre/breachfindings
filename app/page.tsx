@@ -7,7 +7,20 @@ const supabase = createClient(
   "https://polxpjuoekicvryiuygf.supabase.co",
   "sb_publishable_Jon0OJ8qtBXsTemjiGoUdg_Lry5sSUj"
 );
-
+const FREE_EMAIL_DOMAINS = new Set([
+  // Deutsche Anbieter
+  "web.de", "gmx.de", "gmx.net", "gmx.at", "gmx.ch",
+  "freenet.de", "t-online.de", "vodafone.de", "arcor.de",
+  "online.de", "email.de", "hotmail.de",
+  // Internationale Anbieter
+  "gmail.com", "googlemail.com", "yahoo.com", "yahoo.de",
+  "yahoo.co.uk", "yahoo.fr", "hotmail.com", "hotmail.co.uk",
+  "outlook.com", "outlook.de", "live.com", "live.de",
+  "msn.com", "icloud.com", "me.com", "mac.com",
+  "aol.com", "protonmail.com", "proton.me", "tutanota.com",
+  "mailbox.org", "posteo.de", "zoho.com", "yandex.com",
+  "yandex.ru", "mail.ru", "inbox.com", "fastmail.com",
+]);
 const reportOptions = [
   {
     title: "Company Report",
@@ -55,15 +68,26 @@ export default function HomePage() {
   }, [businessEmail, companyDomain]);
 
   function openLeadModal() {
-    setFormError("");
-    if (!businessEmail.trim() && !companyDomain.trim()) {
-      setFormError(
-        "Please enter either a business email or a business domain first."
-      );
+  setFormError("");
+
+  if (!businessEmail.trim() && !companyDomain.trim()) {
+    setFormError(
+      "Please enter either a business email or a business domain first."
+    );
+    return;
+  }
+
+  // Prüfen ob freier E-Mail-Anbieter
+  if (businessEmail.trim()) {
+    const domain = businessEmail.split("@")[1]?.trim().toLowerCase();
+    if (domain && FREE_EMAIL_DOMAINS.has(domain)) {
+      setFormError("Please use a business email address. Free email providers are not allowed.");
       return;
     }
-    setShowLeadModal(true);
   }
+
+  setShowLeadModal(true);
+}
 
   async function handleLeadSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
