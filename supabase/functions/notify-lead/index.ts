@@ -4,8 +4,12 @@ serve(async (req) => {
   const payload = await req.json();
   const lead = payload.record;
 
+  const consentText = lead.consent
+    ? "✅ Zugestimmt"
+    : "❌ Nicht zugestimmt";
+
   const emailBody = `
-    <h2>Neuer Lead auf breachfindings.apasec.de</h2>
+    <h2>Neuer Lead auf breachfinder.de</h2>
     <table style="border-collapse: collapse; width: 100%;">
       <tr>
         <td style="padding: 8px; border: 1px solid #ddd;"><strong>Name</strong></td>
@@ -31,13 +35,10 @@ serve(async (req) => {
         <td style="padding: 8px; border: 1px solid #ddd;"><strong>Zeitpunkt</strong></td>
         <td style="padding: 8px; border: 1px solid #ddd;">${new Date(lead.created_at).toLocaleString("de-DE")}</td>
       </tr>
-	  <tr>
-	<td style="padding: 8px; border: 1px solid #ddd;"><strong>Zustimmung</strong></td>
-	<td style="padding: 8px; border: 1px solid #ddd;">${lead.consent ? 'Ich bestätige hiermit, 
-	dass ich der rechtmäßige Eigentümer der oben angegebenen Domain bin
-	oder zur Vertretung des Eigentümers autorisiert wurde. Mir ist bewusst, dass falsche 
-	Angaben rechtliche Konsequenzen nach sich ziehen können.✅ Zugestimmt' : '❌ Nicht zugestimmt'}</td>
-</tr>
+      <tr>
+        <td style="padding: 8px; border: 1px solid #ddd;"><strong>Zustimmung</strong></td>
+        <td style="padding: 8px; border: 1px solid #ddd;">${consentText}</td>
+      </tr>
     </table>
   `;
 
