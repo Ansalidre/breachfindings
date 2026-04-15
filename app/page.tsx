@@ -235,7 +235,7 @@ export default function HomePage() {
 
       <section className="hero centered-hero">
         <div className="hero-copy centered-copy">
-          <h1>Have I Been Breached?</h1>
+          <h1>Have We Been Breached?</h1>
         </div>
 
         <div className="hero-card wide-card">
