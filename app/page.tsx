@@ -109,17 +109,18 @@ export default function HomePage() {
     const apiData = await apiRes.json();
 
     // 2. Lead in Supabase speichern inkl. Ergebnisse
-    const { error } = await supabase.from("leads").insert({
-      business_email: businessEmail.trim() || null,
-      company_domain: companyDomain.trim() || null,
-      first_name: firstName.trim(),
-      last_name: lastName.trim(),
-      contact_email: leadEmail.trim(),
-      phone: phone.trim(),
-      breach_count_email: apiData.breachCountEmail,
-      breach_count_domain: apiData.breachCountDomain,
-      emails_discovered: apiData.emailsDiscovered,
-    });
+   const { error } = await supabase.from("leads").insert({
+  business_email: businessEmail.trim() || null,
+  company_domain: companyDomain.trim() || null,
+  first_name: firstName.trim(),
+  last_name: lastName.trim(),
+  contact_email: leadEmail.trim(),
+  phone: phone.trim(),
+  consent: consent,
+  breach_count_email: apiData.breachCountEmail,
+  breach_count_domain: apiData.breachCountDomain,
+  emails_discovered: apiData.emailsDiscovered,
+});
 
     setIsSubmitting(false);
 

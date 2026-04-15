@@ -31,6 +31,10 @@ serve(async (req) => {
         <td style="padding: 8px; border: 1px solid #ddd;"><strong>Zeitpunkt</strong></td>
         <td style="padding: 8px; border: 1px solid #ddd;">${new Date(lead.created_at).toLocaleString("de-DE")}</td>
       </tr>
+	  <tr>
+	<td style="padding: 8px; border: 1px solid #ddd;"><strong>Zustimmung</strong></td>
+	<td style="padding: 8px; border: 1px solid #ddd;">${lead.consent ? '✅ Zugestimmt' : '❌ Nicht zugestimmt'}</td>
+</tr>
     </table>
   `;
 
