@@ -49,7 +49,7 @@ serve(async (req) => {
     },
     body: JSON.stringify({
       from: "noreply@apasec.de",
-      to: "kontakt@apasec.de",
+      to: "lead@apasec.de",
       subject: `Neuer Lead: ${lead.first_name} ${lead.last_name} (${lead.company_domain || lead.business_email})`,
       html: emailBody,
     }),
