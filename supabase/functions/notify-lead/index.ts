@@ -33,7 +33,10 @@ serve(async (req) => {
       </tr>
 	  <tr>
 	<td style="padding: 8px; border: 1px solid #ddd;"><strong>Zustimmung</strong></td>
-	<td style="padding: 8px; border: 1px solid #ddd;">${lead.consent ? '✅ Zugestimmt' : '❌ Nicht zugestimmt'}</td>
+	<td style="padding: 8px; border: 1px solid #ddd;">${lead.consent ? 'Ich bestätige hiermit, 
+	dass ich der rechtmäßige Eigentümer der oben angegebenen Domain bin
+	oder zur Vertretung des Eigentümers autorisiert wurde. Mir ist bewusst, dass falsche 
+	Angaben rechtliche Konsequenzen nach sich ziehen können.✅ Zugestimmt' : '❌ Nicht zugestimmt'}</td>
 </tr>
     </table>
   `;
