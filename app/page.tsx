@@ -8,27 +8,6 @@ const supabase = createClient(
   "sb_publishable_Jon0OJ8qtBXsTemjiGoUdg_Lry5sSUj"
 );
 
-const metrics = [
-  {
-    label: "Business email breaches",
-    value: "6",
-    description:
-      "How many known breach events included the submitted business email.",
-  },
-  {
-    label: "Domain breaches",
-    value: "18",
-    description:
-      "How many known breach datasets included the submitted company domain.",
-  },
-  {
-    label: "Emails discovered",
-    value: "137",
-    description:
-      "How many email addresses related to the domain were found in indexed sources.",
-  },
-];
-
 const reportOptions = [
   {
     title: "Company Report",
@@ -46,11 +25,19 @@ const reportOptions = [
   },
 ];
 
+interface Results {
+  breachCountEmail: number | null;
+  breachCountDomain: number;
+  emailsDiscovered: number;
+}
+
 export default function HomePage() {
   const [businessEmail, setBusinessEmail] = useState("");
   const [companyDomain, setCompanyDomain] = useState("");
   const [showLeadModal, setShowLeadModal] = useState(false);
   const [showResults, setShowResults] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [results, setResults] = useState<Results | null>(null);
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
@@ -68,14 +55,12 @@ export default function HomePage() {
 
   function openLeadModal() {
     setFormError("");
-
     if (!businessEmail.trim() && !companyDomain.trim()) {
       setFormError(
         "Please enter either a business email or a business domain first."
       );
       return;
     }
-
     setShowLeadModal(true);
   }
 
@@ -107,6 +92,19 @@ export default function HomePage() {
 
     setIsSubmitting(true);
 
+    // 1. API abfragen
+    const apiRes = await fetch("/api/check", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: businessEmail.trim() || null,
+        domain: expectedDomain,
+      }),
+    });
+
+    const apiData = await apiRes.json();
+
+    // 2. Lead in Supabase speichern inkl. Ergebnisse
     const { error } = await supabase.from("leads").insert({
       business_email: businessEmail.trim() || null,
       company_domain: companyDomain.trim() || null,
@@ -114,6 +112,9 @@ export default function HomePage() {
       last_name: lastName.trim(),
       contact_email: leadEmail.trim(),
       phone: phone.trim(),
+      breach_count_email: apiData.breachCountEmail,
+      breach_count_domain: apiData.breachCountDomain,
+      emails_discovered: apiData.emailsDiscovered,
     });
 
     setIsSubmitting(false);
@@ -124,9 +125,44 @@ export default function HomePage() {
       return;
     }
 
+    setResults(apiData);
     setShowLeadModal(false);
-    setShowResults(true);
+    setIsLoading(true);
+
+    setTimeout(() => {
+      setIsLoading(false);
+      setShowResults(true);
+    }, 800);
   }
+
+  const riskLevel =
+    results &&
+    (results.breachCountDomain > 15 || (results.breachCountEmail ?? 0) > 5)
+      ? "High exposure"
+      : "Medium exposure";
+
+  const metrics = results
+    ? [
+        {
+          label: "Business email breaches",
+          value: results.breachCountEmail !== null ? String(results.breachCountEmail) : "—",
+          description:
+            "How many known breach events included the submitted business email.",
+        },
+        {
+          label: "Domain breaches",
+          value: String(results.breachCountDomain),
+          description:
+            "How many known breach datasets included the submitted company domain.",
+        },
+        {
+          label: "Emails discovered",
+          value: String(results.emailsDiscovered),
+          description:
+            "How many email addresses related to the domain were found in indexed sources.",
+        },
+      ]
+    : [];
 
   return (
     <main className="page-shell">
@@ -211,7 +247,7 @@ export default function HomePage() {
                   Cancel
                 </button>
                 <button type="submit" disabled={isSubmitting}>
-                  {isSubmitting ? "Saving..." : "Continue"}
+                  {isSubmitting ? "Checking..." : "Continue"}
                 </button>
               </div>
             </form>
@@ -228,7 +264,7 @@ export default function HomePage() {
           </div>
         </div>
 
-        <a className="topbar-link" href="#reports">
+        <a className="topbar-link" href="https://apascope.de" target="_blank" rel="noopener noreferrer">
           Request full report
         </a>
       </header>
@@ -283,15 +319,23 @@ export default function HomePage() {
         </div>
       </section>
 
-      {showResults && (
+      {isLoading && (
+        <section className="snapshot-card" style={{ textAlign: "center", padding: "48px" }}>
+          <p style={{ color: "var(--muted)", fontSize: "1.1rem" }}>
+            Scanning for breaches...
+          </p>
+        </section>
+      )}
+
+      {showResults && results && (
         <>
           <section className="snapshot-card">
             <div className="snapshot-header">
               <div>
-                <p className="eyebrow">Example result</p>
+                <p className="eyebrow">Result</p>
                 <h2>Your exposure snapshot</h2>
               </div>
-              <div className="risk-badge">High exposure</div>
+              <div className="risk-badge">{riskLevel}</div>
             </div>
 
             <div className="metric-grid">
