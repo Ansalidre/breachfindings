@@ -1,6 +1,12 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import { createClient } from "@supabase/supabase-js";
+
+const supabase = createClient(
+  "https://polxpjuoekicvryiuygf.supabase.co",
+  "sb_publishable_Jon0OJ8qtBXsTemjiGoUdg_Lry5sSUj"
+);
 
 const metrics = [
   {
@@ -51,6 +57,7 @@ export default function HomePage() {
   const [leadEmail, setLeadEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [formError, setFormError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const expectedDomain = useMemo(() => {
     if (businessEmail.includes("@")) {
@@ -72,7 +79,7 @@ export default function HomePage() {
     setShowLeadModal(true);
   }
 
-  function handleLeadSubmit(e: React.FormEvent<HTMLFormElement>) {
+  async function handleLeadSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setFormError("");
 
@@ -95,6 +102,25 @@ export default function HomePage() {
 
     if (enteredDomain !== expectedDomain) {
       setFormError(`The email domain must match ${expectedDomain}.`);
+      return;
+    }
+
+    setIsSubmitting(true);
+
+    const { error } = await supabase.from("leads").insert({
+      business_email: businessEmail.trim() || null,
+      company_domain: companyDomain.trim() || null,
+      first_name: firstName.trim(),
+      last_name: lastName.trim(),
+      contact_email: leadEmail.trim(),
+      phone: phone.trim(),
+    });
+
+    setIsSubmitting(false);
+
+    if (error) {
+      console.error("Supabase error:", error);
+      setFormError("Something went wrong. Please try again.");
       return;
     }
 
@@ -143,24 +169,26 @@ export default function HomePage() {
                   onChange={(e) => setLastName(e.target.value)}
                 />
               </div>
+
               <div className="field">
-            <label htmlFor="phone">Phone number</label>
-            <input
-            id="phone"
-            type="tel"
-            placeholder="+49 123 456789"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value)}
-            />
-            </div>
-              <div className="field">
-                <label htmlFor="leadEmail">Email</label>
+                <label htmlFor="leadEmail">Business email</label>
                 <input
                   id="leadEmail"
                   type="email"
                   placeholder="name@company.com"
                   value={leadEmail}
                   onChange={(e) => setLeadEmail(e.target.value)}
+                />
+              </div>
+
+              <div className="field">
+                <label htmlFor="phone">Phone number</label>
+                <input
+                  id="phone"
+                  type="tel"
+                  placeholder="+49 123 456789"
+                  value={phone}
+                  onChange={(e) => setPhone(e.target.value)}
                 />
               </div>
 
@@ -182,7 +210,9 @@ export default function HomePage() {
                 >
                   Cancel
                 </button>
-                <button type="submit">Continue</button>
+                <button type="submit" disabled={isSubmitting}>
+                  {isSubmitting ? "Saving..." : "Continue"}
+                </button>
               </div>
             </form>
           </div>
