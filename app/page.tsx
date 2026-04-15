@@ -43,6 +43,7 @@ export default function HomePage() {
   const [lastName, setLastName] = useState("");
   const [leadEmail, setLeadEmail] = useState("");
   const [phone, setPhone] = useState("");
+  const [consent, setConsent] = useState(false);
   const [formError, setFormError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -67,7 +68,10 @@ export default function HomePage() {
   async function handleLeadSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setFormError("");
-
+    if (!firstName.trim() || !lastName.trim() || !leadEmail.trim() || !phone.trim() || !consent) {
+  setFormError("Please complete all fields and accept the consent.");
+  return;
+}
     if (!firstName.trim() || !lastName.trim() || !leadEmail.trim() || !phone.trim()) {
       setFormError("Please complete all fields.");
       return;
@@ -227,7 +231,22 @@ export default function HomePage() {
                   onChange={(e) => setPhone(e.target.value)}
                 />
               </div>
-
+               <div className="field">
+  <label className="consent-label">
+    <input
+      type="checkbox"
+      checked={consent}
+      onChange={(e) => setConsent(e.target.checked)}
+    />
+    <span>
+      I consent to the processing and use of my personal data provided in this 
+      contact form, as well as any additional information submitted by me, for 
+      the purposes of responding to my inquiry, presenting products, and, where 
+      applicable, initiating and carrying out product-related sales activities. 
+      I may withdraw my consent at any time with future effect.
+    </span>
+  </label>
+</div>   
               <p className="match-info">
                 Your email must match this domain:
                 <strong> {expectedDomain || "—"}</strong>
