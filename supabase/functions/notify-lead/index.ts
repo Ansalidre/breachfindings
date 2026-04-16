@@ -4,8 +4,8 @@ serve(async (req) => {
   const payload = await req.json();
   const lead = payload.record;
 
-  const consentText = lead.consent
-    ? "✅ Zugestimmt"
+const consentText = lead.consent
+    ? "✅ Zugestimmt – Der Nutzer hat folgendem Text zugestimmt: \"Ich bestätige hiermit, dass ich der rechtmäßige Eigentümer der oben angegebenen Domain bin oder zur Vertretung des Eigentümers autorisiert wurde. Mir ist bewusst, dass falsche Angaben rechtliche Konsequenzen nach sich ziehen können.\""
     : "❌ Nicht zugestimmt";
 
   const emailBody = `
