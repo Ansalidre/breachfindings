@@ -608,4 +608,44 @@ input {
   accent-color: var(--accent);
   cursor: pointer;
 }
+.loading-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 24px;
+  padding: 64px 32px;
+  text-align: center;
+}
+
+.loading-bar-track {
+  width: 100%;
+  max-width: 480px;
+  height: 6px;
+  background: var(--line);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.loading-bar-fill {
+  height: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--accent), #59c4ff);
+  animation: loading-progress 60s linear forwards;
+}
+
+@keyframes loading-progress {
+  0%   { width: 0%; }
+  80%  { width: 85%; }
+  95%  { width: 92%; }
+  100% { width: 95%; }
+}
+
+.loading-steps {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 0.85rem;
+}
 }

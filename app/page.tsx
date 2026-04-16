@@ -161,7 +161,7 @@ export default function HomePage() {
     setTimeout(() => {
       setIsLoading(false);
       setShowResults(true);
-    }, 800);
+    }, 60000);
   }
 
   const riskLevel =
@@ -364,12 +364,19 @@ export default function HomePage() {
       </section>
 
       {isLoading && (
-        <section className="snapshot-card" style={{ textAlign: "center", padding: "48px" }}>
-          <p style={{ color: "var(--muted)", fontSize: "1.1rem" }}>
-            Scanning for breaches...
-          </p>
-        </section>
-      )}
+  <section className="snapshot-card loading-card">
+    <p className="eyebrow">Scanning in progress</p>
+    <h2 style={{ margin: 0 }}>Checking for breaches...</h2>
+    <div className="loading-bar-track">
+      <div className="loading-bar-fill" />
+    </div>
+    <div className="loading-steps">
+      <p>🔍 Querying breach databases...</p>
+      <p>📧 Scanning email exposure...</p>
+      <p>🌐 Analyzing domain records...</p>
+    </div>
+  </section>
+)}
 
       {showResults && results && (
         <>
