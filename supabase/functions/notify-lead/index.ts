@@ -62,8 +62,7 @@ const consentDomainText = lead.consent_domain
       html: emailBody,
     }),
   });
-const lead = payload.record;
-console.log("Full record:", JSON.stringify(lead));
+
   const data = await res.json();
   return new Response(JSON.stringify(data), { status: 200 });
 });
