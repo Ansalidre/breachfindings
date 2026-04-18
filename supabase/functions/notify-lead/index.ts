@@ -7,6 +7,9 @@ serve(async (req) => {
 const consentText = lead.consent
     ? "✅ Zugestimmt – Der Nutzer hat folgendem Text zugestimmt: \"Ich bestätige hiermit, dass ich der rechtmäßige Eigentümer der oben angegebenen Domain bin oder zur Vertretung des Eigentümers autorisiert wurde. Mir ist bewusst, dass falsche Angaben rechtliche Konsequenzen nach sich ziehen können.\""
     : "❌ Nicht zugestimmt";
+const consentDomainText = lead.consent_domain
+    ? "✅ Bestätigt – Der Nutzer hat bestätigt, dass er der Eigentümer der angegebenen Domain ist oder die Genehmigung des Domaineigners für diese Überprüfung hat."
+    : "❌ Nicht bestätigt"
 
   const emailBody = `
     <h2>Neuer Lead auf breachfinder.de</h2>
@@ -39,6 +42,10 @@ const consentText = lead.consent
         <td style="padding: 8px; border: 1px solid #ddd;"><strong>Zustimmung</strong></td>
         <td style="padding: 8px; border: 1px solid #ddd;">${consentText}</td>
       </tr>
+	  <tr>
+	  <td style="padding: 8px; border: 1px solid #ddd;"><strong>Domain-Berechtigung</strong></td>
+	  <td style="padding: 8px; border: 1px solid #ddd;">${consentDomainText}</td>
+</tr>
     </table>
   `;
 
@@ -55,7 +62,8 @@ const consentText = lead.consent
       html: emailBody,
     }),
   });
-
+const lead = payload.record;
+console.log("Full record:", JSON.stringify(lead));
   const data = await res.json();
   return new Response(JSON.stringify(data), { status: 200 });
 });
