@@ -4,15 +4,14 @@ import { useMemo, useState } from "react";
 import { createClient } from "@supabase/supabase-js";
 
 const supabase = createClient(
-  "https://polxpjuoekicvryiuygf.supabase.co",
-  "sb_publishable_Jon0OJ8qtBXsTemjiGoUdg_Lry5sSUj"
+  process.env.NEXT_PUBLIC_SUPABASE_URL!,
+  process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
 );
+
 const FREE_EMAIL_DOMAINS = new Set([
-  // Deutsche Anbieter
   "web.de", "gmx.de", "gmx.net", "gmx.at", "gmx.ch",
   "freenet.de", "t-online.de", "vodafone.de", "arcor.de",
   "online.de", "email.de", "hotmail.de",
-  // Internationale Anbieter
   "gmail.com", "googlemail.com", "yahoo.com", "yahoo.de",
   "yahoo.co.uk", "yahoo.fr", "hotmail.com", "hotmail.co.uk",
   "outlook.com", "outlook.de", "live.com", "live.de",
@@ -21,28 +20,6 @@ const FREE_EMAIL_DOMAINS = new Set([
   "mailbox.org", "posteo.de", "zoho.com", "yandex.com",
   "yandex.ru", "mail.ru", "inbox.com", "fastmail.com",
 ]);
-const reportOptions = [
-  {
-    title: "Company Report",
-    price: "from €199",
-    description:
-      "Detailed report for your own organization with exposure summary, risk explanation, and next-step recommendations.",
-    cta: "Request company report",
-  },
-  {
-    title: "Company + Suppliers Report",
-    price: "from €499",
-    description:
-      "Extended report including your company and relevant supplier exposure intelligence for third-party risk review.",
-    cta: "Request supplier report",
-  },
-];
-
-interface Results {
-  breachCountEmail: number | null;
-  breachCountDomain: number;
-  emailsDiscovered: number;
-}
 
 export default function HomePage() {
   const [businessEmail, setBusinessEmail] = useState("");
@@ -50,13 +27,13 @@ export default function HomePage() {
   const [showLeadModal, setShowLeadModal] = useState(false);
   const [showResults, setShowResults] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [results, setResults] = useState<Results | null>(null);
 
   const [firstName, setFirstName] = useState("");
   const [lastName, setLastName] = useState("");
   const [leadEmail, setLeadEmail] = useState("");
   const [phone, setPhone] = useState("");
   const [consent, setConsent] = useState(false);
+  const [consentDomain, setConsentDomain] = useState(false);
   const [formError, setFormError] = useState("");
   const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -68,130 +45,74 @@ export default function HomePage() {
   }, [businessEmail, companyDomain]);
 
   function openLeadModal() {
-  setFormError("");
+    setFormError("");
 
-  if (!businessEmail.trim() && !companyDomain.trim()) {
-    setFormError(
-      "Please enter either a business email or a business domain first."
-    );
-    return;
-  }
-
-  // Prüfen ob freier E-Mail-Anbieter
-  if (businessEmail.trim()) {
-    const domain = businessEmail.split("@")[1]?.trim().toLowerCase();
-    if (domain && FREE_EMAIL_DOMAINS.has(domain)) {
-      setFormError("Please use a business email address. Free email providers are not allowed.");
+    if (!businessEmail.trim() && !companyDomain.trim()) {
+      setFormError("Please enter either a business email or a business domain first.");
       return;
     }
-  }
 
-  setShowLeadModal(true);
-}
+    if (businessEmail.trim()) {
+      const domain = businessEmail.split("@")[1]?.trim().toLowerCase();
+      if (domain && FREE_EMAIL_DOMAINS.has(domain)) {
+        setFormError("Please use a business email address. Free email providers are not allowed.");
+        return;
+      }
+    }
+
+    setShowLeadModal(true);
+  }
 
   async function handleLeadSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
     setFormError("");
-    if (!firstName.trim() || !lastName.trim() || !leadEmail.trim() || !phone.trim() || !consent) {
-  setFormError("Please complete all fields and accept the consent.");
-  return;
-}
-    if (!firstName.trim() || !lastName.trim() || !leadEmail.trim() || !phone.trim()) {
-      setFormError("Please complete all fields.");
+
+    if (!firstName.trim() || !lastName.trim() || !leadEmail.trim() || !phone.trim() || !consent || !consentDomain) {
+      setFormError("Please complete all fields and accept both checkboxes.");
       return;
     }
 
     if (!leadEmail.includes("@")) {
-      setFormError("Please enter a valid business email address.");
-      return;
-    }
-
-    const enteredDomain = leadEmail.split("@")[1].trim().toLowerCase();
-
-    if (!expectedDomain) {
-      setFormError("Please enter a business email or business domain above.");
-      return;
-    }
-
-    if (enteredDomain !== expectedDomain) {
-      setFormError(`The email domain must match ${expectedDomain}.`);
+      setFormError("Please enter a valid email address.");
       return;
     }
 
     setIsSubmitting(true);
 
-    // 1. API abfragen
-    const apiRes = await fetch("/api/check", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        email: businessEmail.trim() || null,
-        domain: expectedDomain,
-      }),
-    });
-
-    const apiData = await apiRes.json();
-
-    // 2. Lead in Supabase speichern inkl. Ergebnisse
-   const { error } = await supabase.from("leads").insert({
-  business_email: businessEmail.trim() || null,
-  company_domain: companyDomain.trim() || null,
-  first_name: firstName.trim(),
-  last_name: lastName.trim(),
-  contact_email: leadEmail.trim(),
-  phone: phone.trim(),
-  consent: consent,
-  breach_count_email: apiData.breachCountEmail,
-  breach_count_domain: apiData.breachCountDomain,
-  emails_discovered: apiData.emailsDiscovered,
-});
-
-    setIsSubmitting(false);
+    // 1. Save lead and get ID back
+    const { data: insertedLead, error } = await supabase.from("leads").insert({
+      business_email: businessEmail.trim() || null,
+      company_domain: companyDomain.trim() || null,
+      first_name: firstName.trim(),
+      last_name: lastName.trim(),
+      contact_email: leadEmail.trim(),
+      phone: phone.trim(),
+      consent: consent,
+      consent_domain: consentDomain,
+    }).select().single();
 
     if (error) {
       console.error("Supabase error:", error);
       setFormError("Something went wrong. Please try again.");
+      setIsSubmitting(false);
       return;
     }
 
-    setResults(apiData);
+    // 2. Call API with lead ID — generates token and sends verification email
+    await fetch("/api/check", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        email: leadEmail.trim(),
+        domain: expectedDomain,
+        leadId: insertedLead.id,
+      }),
+    });
+
+    setIsSubmitting(false);
     setShowLeadModal(false);
-    setIsLoading(true);
-
-    setTimeout(() => {
-      setIsLoading(false);
-      setShowResults(true);
-    }, 60000);
+    setShowResults(true);
   }
-
-  const riskLevel =
-    results &&
-    (results.breachCountDomain > 15 || (results.breachCountEmail ?? 0) > 5)
-      ? "High exposure"
-      : "Medium exposure";
-
-  const metrics = results
-    ? [
-        {
-          label: "Business email breaches",
-          value: results.breachCountEmail !== null ? String(results.breachCountEmail) : "—",
-          description:
-            "How many known breach events included the submitted business email.",
-        },
-        {
-          label: "Domain breaches",
-          value: String(results.breachCountDomain),
-          description:
-            "How many known breach datasets included the submitted company domain.",
-        },
-        {
-          label: "Emails discovered",
-          value: String(results.emailsDiscovered),
-          description:
-            "How many email addresses related to the domain were found in indexed sources.",
-        },
-      ]
-    : [];
 
   return (
     <main className="page-shell">
@@ -251,31 +172,43 @@ export default function HomePage() {
                 <input
                   id="phone"
                   type="tel"
-                  placeholder="+49 123 456789"
+                  placeholder="+1 234 567890"
                   value={phone}
                   onChange={(e) => setPhone(e.target.value)}
                 />
               </div>
-               <div className="field">
-  <label className="consent-label">
-    <input
-      type="checkbox"
-      checked={consent}
-      onChange={(e) => setConsent(e.target.checked)}
-    />
-    <span>
-      I consent to the processing and use of my personal data provided in this 
-      contact form, as well as any additional information submitted by me, for 
-      the purposes of responding to my inquiry, presenting products, and, where 
-      applicable, initiating and carrying out product-related sales activities. 
-      I may withdraw my consent at any time with future effect.
-    </span>
-  </label>
-</div>   
-              <p className="match-info">
-                Your email must match this domain:
-                <strong> {expectedDomain || "—"}</strong>
-              </p>
+
+              <div className="field">
+                <label className="consent-label">
+                  <input
+                    type="checkbox"
+                    checked={consent}
+                    onChange={(e) => setConsent(e.target.checked)}
+                  />
+                  <span>
+                    I consent to the processing and use of my personal data provided in this
+                    contact form, as well as any additional information submitted by me, for
+                    the purposes of responding to my inquiry, presenting products, and, where
+                    applicable, initiating and carrying out product-related sales activities.
+                    I may withdraw my consent at any time with future effect.
+                  </span>
+                </label>
+              </div>
+
+              <div className="field">
+                <label className="consent-label">
+                  <input
+                    type="checkbox"
+                    checked={consentDomain}
+                    onChange={(e) => setConsentDomain(e.target.checked)}
+                  />
+                  <span>
+                    I confirm that I am the owner of the stated domain or have been
+                    authorized to represent the owner. I am aware that false statements
+                    may have legal consequences.
+                  </span>
+                </label>
+              </div>
 
               {formError && <p className="form-error">{formError}</p>}
 
@@ -291,7 +224,7 @@ export default function HomePage() {
                   Cancel
                 </button>
                 <button type="submit" disabled={isSubmitting}>
-                  {isSubmitting ? "Checking..." : "Continue"}
+                  {isSubmitting ? "Processing..." : "Continue"}
                 </button>
               </div>
             </form>
@@ -307,7 +240,6 @@ export default function HomePage() {
             <div className="brand-subtitle">by apasec</div>
           </div>
         </div>
-
         <a className="topbar-link" href="https://apascope.de" target="_blank" rel="noopener noreferrer">
           Request full report
         </a>
@@ -323,7 +255,7 @@ export default function HomePage() {
             <div className="field-block">
               <label htmlFor="businessEmail">Business Email</label>
               <p className="field-hint">
-                No free mail providers allowed (e.g. web.de, gmx.de, gmail.com)
+                No free mail providers allowed (e.g. gmail.com, yahoo.com)
               </p>
               <input
                 id="businessEmail"
@@ -351,8 +283,25 @@ export default function HomePage() {
             </div>
           </div>
 
+          <p style={{
+            color: "var(--muted)",
+            fontSize: "0.82rem",
+            textAlign: "center",
+            margin: "16px 0 0"
+          }}>
+            For legal reasons, this security check may only be performed for domains you own or have explicit permission to check.
+          </p>
+
           <div className="hero-button-row">
-            <button type="button" onClick={openLeadModal}>
+            <button
+              type="button"
+              onClick={openLeadModal}
+              disabled={showResults || isLoading}
+              style={{
+                opacity: showResults || isLoading ? 0.4 : 1,
+                cursor: showResults || isLoading ? "not-allowed" : "pointer"
+              }}
+            >
               Run free exposure check
             </button>
           </div>
@@ -363,101 +312,32 @@ export default function HomePage() {
         </div>
       </section>
 
-      {isLoading && (
-  <section className="snapshot-card loading-card">
-    <p className="eyebrow">Scanning in progress</p>
-    <h2 style={{ margin: 0 }}>Checking for breaches...</h2>
-    <div className="loading-bar-track">
-      <div className="loading-bar-fill" />
-    </div>
-    <div className="loading-steps">
-      <p>🔍 Querying breach databases...</p>
-      <p>📧 Scanning email exposure...</p>
-      <p>🌐 Analyzing domain records...</p>
-    </div>
-  </section>
-)}
-
-      {showResults && results && (
-        <>
-          <section className="snapshot-card">
-            <div className="snapshot-header">
-              <div>
-                <p className="eyebrow">Result</p>
-                <h2>Your exposure snapshot</h2>
-              </div>
-              <div className="risk-badge">{riskLevel}</div>
-            </div>
-
-            <div className="metric-grid">
-              {metrics.map((metric) => (
-                <article key={metric.label} className="metric-card">
-                  <div className="metric-value">{metric.value}</div>
-                  <h3>{metric.label}</h3>
-                  <p>{metric.description}</p>
-                </article>
-              ))}
-            </div>
-
-            <div className="snapshot-footer">
-              <p>
-                Need the full details behind these findings? Order a complete
-                report with the relevant breach sources, affected identities,
-                and recommended actions.
-              </p>
-              <a className="primary-link" href="#reports">
-                View report options
-              </a>
-            </div>
-          </section>
-
-          <section className="trust-grid">
-            <article className="trust-card">
-              <h3>Lead magnet first</h3>
-              <p>
-                The landing page shows only the top-line numbers. Full details
-                stay behind the paid report funnel.
-              </p>
-            </article>
-            <article className="trust-card">
-              <h3>Built for business users</h3>
-              <p>
-                The form uses business email plus domain to frame the result
-                around the company, not just a single mailbox.
-              </p>
-            </article>
-            <article className="trust-card">
-              <h3>Ready for Darkscope</h3>
-              <p>
-                The structure is designed so your own backend can query
-                Darkscope securely and return a normalized summary.
-              </p>
-            </article>
-          </section>
-
-          <section id="reports" className="reports-section">
-            <div className="section-copy">
-              <p className="eyebrow">Paid conversion step</p>
-              <h2>Request a full report</h2>
-              <p>
-                The next screen can route users into Stripe Checkout and trigger
-                report delivery after payment.
-              </p>
-            </div>
-
-            <div className="report-grid">
-              {reportOptions.map((option) => (
-                <article key={option.title} className="report-card">
-                  <div className="report-price">{option.price}</div>
-                  <h3>{option.title}</h3>
-                  <p>{option.description}</p>
-                  <button type="button">{option.cta}</button>
-                </article>
-              ))}
-            </div>
-          </section>
-        </>
+      {showResults && (
+        <section className="snapshot-card loading-card">
+          <p className="eyebrow">Almost there</p>
+          <h2 style={{ margin: 0 }}>Please check your inbox</h2>
+          <p style={{ color: "var(--muted)", maxWidth: 480, textAlign: "center", lineHeight: 1.6 }}>
+            We have sent a verification link to your email address.
+            Click the link to view your results.
+            <br /><br />
+            The link is valid for 24 hours and can only be used once.
+          </p>
+        </section>
       )}
+
+      <footer className="site-footer">
+        <div className="footer-links">
+          <a href="/imprint">Imprint</a>
+          <a href="/privacy">Privacy Policy</a>
+        </div>
+        <a href="https://apascope.de" target="_blank" rel="noopener noreferrer">
+          <img src="/logo-apascope.png" alt="Apascope Logo" className="footer-logo" />
+        </a>
+        <div className="footer-bottom">
+          <span>© 2026 Apasec ApS — More at <a href="https://apasec.de" target="_blank" rel="noopener noreferrer">apasec.de</a></span>
+          <span>Apascope is a product of Apasec ApS</span>
+        </div>
+      </footer>
     </main>
   );
 }

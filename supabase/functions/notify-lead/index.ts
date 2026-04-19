@@ -62,7 +62,10 @@ const consentDomainText = lead.consent_domain
       html: emailBody,
     }),
   });
+<<<<<<< HEAD
 
+=======
+>>>>>>> 89211838b98c56a3536aa3fff516b3f340dfb7be
   const data = await res.json();
   return new Response(JSON.stringify(data), { status: 200 });
 });
