@@ -19,13 +19,13 @@ interface Results {
 const reportOptions = [
   {
     title: "Company Report",
-    price: "from €199",
+    price: "€199",
     description: "Detailed report for your own organization with exposure summary, risk explanation, and next-step recommendations.",
     cta: "Order report",
   },
   {
     title: "Company + Suppliers Report",
-    price: "from €499",
+    price: "€499",
     description: "Extended report including your company and relevant supplier exposure intelligence for third-party risk review.",
     cta: "Order report",
   },
